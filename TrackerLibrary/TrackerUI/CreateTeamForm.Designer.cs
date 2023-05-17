@@ -151,6 +151,7 @@ namespace TrackerUI
             this.createMemberButton.TabIndex = 47;
             this.createMemberButton.Text = "Create Member";
             this.createMemberButton.UseVisualStyleBackColor = false;
+            this.createMemberButton.Click += new System.EventHandler(this.createMemberButton_Click);
             // 
             // phoneNoValue
             // 

@@ -18,7 +18,7 @@ namespace TrackerUI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            TrackerLibrary.GlobalConfig.InitializeConnections(true,true);
+            TrackerLibrary.GlobalConfig.InitializeConnections(TrackerLibrary.DatabaseType.TextFile);
             Application.Run(new CreatePrizeForm());
 //            Application.Run(new TournamentDashboardForm());
         }
