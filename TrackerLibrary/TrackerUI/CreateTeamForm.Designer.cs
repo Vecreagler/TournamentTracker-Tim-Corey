@@ -37,7 +37,7 @@ namespace TrackerUI
             this.addMemberButton = new System.Windows.Forms.Button();
             this.addNewMemberGroupbox = new System.Windows.Forms.GroupBox();
             this.createMemberButton = new System.Windows.Forms.Button();
-            this.phoneNoValue = new System.Windows.Forms.TextBox();
+            this.cellphoneValue = new System.Windows.Forms.TextBox();
             this.phoneNoLabel = new System.Windows.Forms.Label();
             this.emailValue = new System.Windows.Forms.TextBox();
             this.emailLabel = new System.Windows.Forms.Label();
@@ -120,7 +120,7 @@ namespace TrackerUI
             // addNewMemberGroupbox
             // 
             this.addNewMemberGroupbox.Controls.Add(this.createMemberButton);
-            this.addNewMemberGroupbox.Controls.Add(this.phoneNoValue);
+            this.addNewMemberGroupbox.Controls.Add(this.cellphoneValue);
             this.addNewMemberGroupbox.Controls.Add(this.phoneNoLabel);
             this.addNewMemberGroupbox.Controls.Add(this.emailValue);
             this.addNewMemberGroupbox.Controls.Add(this.emailLabel);
@@ -153,13 +153,13 @@ namespace TrackerUI
             this.createMemberButton.UseVisualStyleBackColor = false;
             this.createMemberButton.Click += new System.EventHandler(this.createMemberButton_Click);
             // 
-            // phoneNoValue
+            // cellphoneValue
             // 
-            this.phoneNoValue.Location = new System.Drawing.Point(166, 242);
-            this.phoneNoValue.MinimumSize = new System.Drawing.Size(150, 4);
-            this.phoneNoValue.Name = "phoneNoValue";
-            this.phoneNoValue.Size = new System.Drawing.Size(193, 43);
-            this.phoneNoValue.TabIndex = 54;
+            this.cellphoneValue.Location = new System.Drawing.Point(166, 242);
+            this.cellphoneValue.MinimumSize = new System.Drawing.Size(150, 4);
+            this.cellphoneValue.Name = "cellphoneValue";
+            this.cellphoneValue.Size = new System.Drawing.Size(193, 43);
+            this.cellphoneValue.TabIndex = 54;
             // 
             // phoneNoLabel
             // 
@@ -309,7 +309,7 @@ namespace TrackerUI
         private System.Windows.Forms.Button addMemberButton;
         private System.Windows.Forms.GroupBox addNewMemberGroupbox;
         private System.Windows.Forms.Button createMemberButton;
-        private System.Windows.Forms.TextBox phoneNoValue;
+        private System.Windows.Forms.TextBox cellphoneValue;
         private System.Windows.Forms.Label phoneNoLabel;
         private System.Windows.Forms.TextBox emailValue;
         private System.Windows.Forms.Label emailLabel;

@@ -10,6 +10,26 @@ namespace TrackerLibrary.DataAccess
 {
     public class SqlConnector : IDataConnection
     {
+        public PersonModel CreatePerson(PersonModel model)
+        {
+            using (IDbConnection connection = new Microsoft.Data.SqlClient.SqlConnection(GlobalConfig.CnnString("Tournaments")))
+            {
+                var p = new DynamicParameters();
+                p.Add("@FirstName", model.FirstName);
+                p.Add("@LastName", model.Lastname);
+                p.Add("@EmailAddress", model.EmailAddress);
+                p.Add("@CellPhoneNumber", model.CellPhoneNumber);
+                p.Add("@ID", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                connection.Execute("dbo.spPeople_Insert", p, commandType: CommandType.StoredProcedure);
+
+                model.ID = p.Get<int>("@ID");
+
+                return model;
+
+            }
+        }
+
         public PrizeModel CreatePrize(PrizeModel model)
         {
             using (IDbConnection connection = new Microsoft.Data.SqlClient.SqlConnection(GlobalConfig.CnnString("Tournaments")))

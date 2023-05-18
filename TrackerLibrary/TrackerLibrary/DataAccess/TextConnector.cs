@@ -11,6 +11,25 @@ namespace TrackerLibrary.DataAccess
     {
         private const string PrizesFile = "PrizeModels.csv";
 
+        private const string PeopleFile = "PersonModels.csv";
+        
+        public PersonModel CreatePerson(PersonModel model)
+        {
+            List<PersonModel> people = PeopleFile.FullFilePath().LoadFile().ConvertToPersonModels();
+
+            int currentID = 1;
+            if (people.Count > 0)
+            {
+                currentID = people.OrderByDescending(x => x.ID).First().ID + 1;
+            }
+
+            model.ID = currentID;
+
+            people.Add(model);
+            people.SaveToPeopleFile(PeopleFile);
+            return model;
+        }
+
         public PrizeModel CreatePrize(PrizeModel model)
         {
 

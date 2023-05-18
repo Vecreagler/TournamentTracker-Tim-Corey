@@ -41,12 +41,11 @@ namespace TrackerLibrary.DataAccess.TextHelpers
                 p.PrizeAmount = decimal.Parse(cols[3]);
                 p.PrizePercentage = double.Parse(cols[4]);
                 output.Add(p);
-
             }
-            
             return output;
-
         }
+
+       
 
         public static void SaveToPrizeFile(this List<PrizeModel> models, string fileName)
         {
@@ -57,6 +56,39 @@ namespace TrackerLibrary.DataAccess.TextHelpers
                 lines.Add($"{p.ID}, {p.PlaceNumber}, " +
                     $"{p.PlaceName}, {p.PrizeAmount}, " +
                     $"{p.PrizePercentage}");
+            }
+
+            File.WriteAllLines(fileName.FullFilePath(), lines);
+        }
+
+        public static List<PersonModel> ConvertToPersonModels(this List<string> lines)
+        {
+            List<PersonModel> output = new List<PersonModel>();
+            foreach (string line in lines)
+            {
+                string[] cols = line.Split(',');
+
+                PersonModel p = new PersonModel();
+                int i = 0;
+                p.ID = int.Parse(cols[i++]);
+                p.FirstName = cols[i++];
+                p.Lastname = cols[i++];
+                p.EmailAddress = cols[i++];
+                p.CellPhoneNumber = cols[i++];
+                output.Add(p);
+            }
+            return output;
+        }
+
+        public static void SaveToPeopleFile(this List<PersonModel> models, string fileName)
+        {
+            List<string> lines = new List<string>();
+
+            foreach (PersonModel p in models)
+            {
+                lines.Add($"{p.ID}, {p.FirstName}, " +
+                    $"{p.Lastname}, {p.EmailAddress}, " +
+                    $"{p.CellPhoneNumber}");
             }
 
             File.WriteAllLines(fileName.FullFilePath(), lines);
