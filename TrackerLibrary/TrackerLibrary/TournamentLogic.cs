@@ -12,7 +12,7 @@ namespace TrackerLibrary
         {
             List<TeamModel> randomizedTeams = RandomizeTeamOrder(model.EnteredTeams);
             int rounds = FindNumberOfRounds(randomizedTeams.Count);
-            int byes = 0;
+            int byes = NumberOfByes(rounds, randomizedTeams.Count);
 
             model.Rounds.Add(CreateFirstRound(byes, randomizedTeams));
 
@@ -75,8 +75,8 @@ namespace TrackerLibrary
 
         private static int NumberOfByes(int rounds, int numberOfTeams)
         {
-            int output=0;
-            int totalTeams = 0;
+            int output;
+            int totalTeams = 1;
 
             for (int i = 0; i < rounds; i++)
             {
