@@ -120,7 +120,7 @@ namespace TrackerLibrary.DataAccess
                 foreach (MatchupModel matchup in round)
                 {
                     var p = new DynamicParameters();
-                    p.Add("@TournamentId", matchup.ID);
+                    p.Add("@TournamentId", model.ID);
                     p.Add("@MatchupRound", matchup.MatchupRound);
                     p.Add("@ID", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
 
@@ -132,10 +132,11 @@ namespace TrackerLibrary.DataAccess
                     {
                         p = new DynamicParameters();
 
-                        p.Add("@ID", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
                         p.Add("@MatchupId", matchup.ID);
                         p.Add("@ParentMatchupId", entry.ParentMatchup?.ID);
-                         p.Add("@TeamCompetingId", entry.TeamCompeting?.ID);
+                        p.Add("@TeamCompetingId", entry.TeamCompeting?.ID);
+                        p.Add("@ID", 0, dbType: DbType.Int32, direction: ParameterDirection.Output);
+                        
                         connection.Execute("dbo.spMatchupEntries_Insert", p, commandType: CommandType.StoredProcedure);
 
                     }
