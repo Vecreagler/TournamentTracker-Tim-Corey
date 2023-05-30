@@ -61,6 +61,7 @@ namespace TrackerUI
             this.scoreButton.TabIndex = 41;
             this.scoreButton.Text = "Score";
             this.scoreButton.UseVisualStyleBackColor = false;
+            this.scoreButton.Click += new System.EventHandler(this.scoreButton_Click);
             // 
             // versusLabel
             // 
@@ -101,9 +102,9 @@ namespace TrackerUI
             this.teamTwoName.ForeColor = System.Drawing.SystemColors.HotTrack;
             this.teamTwoName.Location = new System.Drawing.Point(522, 462);
             this.teamTwoName.Name = "teamTwoName";
-            this.teamTwoName.Size = new System.Drawing.Size(185, 41);
+            this.teamTwoName.Size = new System.Drawing.Size(192, 41);
             this.teamTwoName.TabIndex = 37;
-            this.teamTwoName.Text = "<team two>";
+            this.teamTwoName.Text = "<Team Two>";
             // 
             // team1ScoreValue
             // 
@@ -131,9 +132,9 @@ namespace TrackerUI
             this.teamOneName.ForeColor = System.Drawing.SystemColors.HotTrack;
             this.teamOneName.Location = new System.Drawing.Point(522, 267);
             this.teamOneName.Name = "teamOneName";
-            this.teamOneName.Size = new System.Drawing.Size(186, 41);
+            this.teamOneName.Size = new System.Drawing.Size(194, 41);
             this.teamOneName.TabIndex = 34;
-            this.teamOneName.Text = "<team one>";
+            this.teamOneName.Text = "<Team One>";
             // 
             // matchupListbox
             // 
@@ -157,6 +158,7 @@ namespace TrackerUI
             this.unplayedOnlyCheckbox.TabIndex = 32;
             this.unplayedOnlyCheckbox.Text = "Unplayed Only";
             this.unplayedOnlyCheckbox.UseVisualStyleBackColor = true;
+            this.unplayedOnlyCheckbox.CheckedChanged += new System.EventHandler(this.unplayedOnlyCheckbox_CheckedChanged);
             // 
             // roundDropdown
             // 
