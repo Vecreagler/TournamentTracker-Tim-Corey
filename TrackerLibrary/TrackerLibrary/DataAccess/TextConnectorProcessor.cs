@@ -156,64 +156,6 @@ namespace TrackerLibrary.DataAccess.TextHelpers
             }
             return output;
         }
-        public static List<MatchupEntryModel> ConvertToMatchupEntryModels(this List<string> lines)
-        {
-            List<MatchupEntryModel> output = new List<MatchupEntryModel>();
-
-            foreach (string line in lines)
-            {
-                string[] cols = line.Split(',');
-
-                MatchupEntryModel me = new MatchupEntryModel();
-                me.ID = int.Parse(cols[0]);
-
-                string teamCompeting = "";
-                if (me.TeamCompeting != null)
-                {
-                    teamCompeting = me.TeamCompeting.ID.ToString();
-                }
-                cols[1] = teamCompeting;
-                me.Score = double.Parse(cols[2]);
-
-                int parentId = 0;
-                if (int.TryParse(cols[3], out parentId))
-                {
-                   me.ParentMatchup = LookupMatchupById(parentId);
-                }
-                else
-                {
-                    me.ParentMatchup = null;
-                }
-
-                output.Add(me);
-            }
-            return output;
-        }
-        public static List<MatchupModel> ConvertToMatchupModels(this List<string> lines)
-        {
-            List<MatchupModel> output = new List<MatchupModel>();
-
-            foreach (string line in lines)
-            {
-                string[] cols = line.Split(',');
-                int i = 0;
-                MatchupModel p = new MatchupModel();
-                p.ID = int.Parse(cols[i++]);
-                p.Entries = ConvertStringToMatchupEntryModel(cols[i++]);
-
-                if (cols[i].Length == 0)
-                {
-                    p.Winner = null;
-                    i++;
-                }else
-                {
-                p.Winner = LookupTeamById(int.Parse(cols[i++]));
-                }
-                p.MatchupRound = int.Parse(cols[i++]);
-                output.Add(p);
-            }
-            return output;
-        }
         private static string ConvertPeopleListToString(List<PersonModel> people)
         {
             string output = "";
@@ -299,6 +241,88 @@ namespace TrackerLibrary.DataAccess.TextHelpers
 
             return output;
         }
+        private static string ConvertMatchupEntryListToString(List<MatchupEntryModel> matchups)
+        {
+            string output = "";
+
+            if (matchups.Count == 0)
+            {
+                return "";
+            }
+
+            foreach (MatchupEntryModel me in matchups)
+            {
+                output += $"{me.ID}|";
+            }
+            output = output.Substring(0, output.Length - 1);
+
+            return output;
+        }
+        public static List<MatchupModel> ConvertToMatchupModels(this List<string> lines)
+        {
+            List<MatchupModel> output = new List<MatchupModel>();
+
+            foreach (string line in lines)
+            {
+                string[] cols = line.Split(',');
+                int i = 0;
+                MatchupModel p = new MatchupModel();
+                p.ID = int.Parse(cols[i++]);
+                p.Entries = ConvertStringToMatchupEntryModel(cols[i++]);
+
+                if (cols[i].Length == 0)
+                {
+                    p.Winner = null;
+                    i++;
+                }else
+                {
+                p.Winner = LookupTeamById(int.Parse(cols[i++]));
+                }
+                p.MatchupRound = int.Parse(cols[i++]);
+                output.Add(p);
+            }
+            return output;
+        }
+        public static List<MatchupEntryModel> ConvertToMatchupEntryModels(this List<string> lines)
+        {
+            List<MatchupEntryModel> output = new List<MatchupEntryModel>();
+
+            foreach (string line in lines)
+            {
+                string[] cols = line.Split(',');
+
+                MatchupEntryModel me = new MatchupEntryModel();
+                me.ID = int.Parse(cols[0]);
+
+                // problem started here, Tim used a different way to fix null error
+                // and later on added lookupteambyid function.
+                // i skipped those parts because mine was "working fine"
+
+                if (cols[1].Length == 0)
+                {
+                    me.TeamCompeting = null;
+                }
+                else
+                {
+                    me.TeamCompeting = LookupTeamById(int.Parse(cols[1]));
+                }
+
+                me.Score = double.Parse(cols[2]);
+
+                int parentId = 0;
+                if (int.TryParse(cols[3], out parentId))
+                {
+                   me.ParentMatchup = LookupMatchupById(parentId);
+                }
+                else
+                {
+                    me.ParentMatchup = null;
+                }
+
+                output.Add(me);
+            }
+            return output;
+        }
         private static List<MatchupEntryModel> ConvertStringToMatchupEntryModel(string input)
         {
             string[] ids = input.Split('|');
@@ -318,23 +342,6 @@ namespace TrackerLibrary.DataAccess.TextHelpers
                 }
             }
             output = matchingEntries.ConvertToMatchupEntryModels();
-            return output;
-        }
-        private static string ConvertMatchupEntryListToString(List<MatchupEntryModel> prizes)
-        {
-            string output = "";
-
-            if (prizes.Count == 0)
-            {
-                return "";
-            }
-
-            foreach (MatchupEntryModel me in prizes)
-            {
-                output += $"{me.ID}|";
-            }
-            output = output.Substring(0, output.Length - 1);
-
             return output;
         }
         #endregion
@@ -406,7 +413,7 @@ namespace TrackerLibrary.DataAccess.TextHelpers
                 }
             }
         }
-        public static void SaveMatchupToFile(this MatchupModel matchup,string matchupFile, string matchupEntryFile)
+        public static void SaveMatchupToFile(this MatchupModel matchup, string matchupFile, string matchupEntryFile)
         {
             List<MatchupModel> matchups = GlobalConfig.MatchupFile.FullFilePath().LoadFile().ConvertToMatchupModels();
 
@@ -425,9 +432,9 @@ namespace TrackerLibrary.DataAccess.TextHelpers
             }
             List<string> lines = new List<string>();
 
+                string winner = "";
             foreach (MatchupModel m in matchups)
             {
-                string winner = "";
 
                 if (m.Winner !=null)
                 {
@@ -455,16 +462,16 @@ namespace TrackerLibrary.DataAccess.TextHelpers
 
             List<string> lines = new List<string>();
             
+                string parent ="";
+                string teamCompeting ="";
             foreach (MatchupEntryModel e in entries)
             {
 
-                string parent = "";
                 if (e.ParentMatchup != null)
                 {
                     parent = e.ParentMatchup.ID.ToString();
                 }
 
-                string teamCompeting = "";
                 if (e.TeamCompeting!= null)
                 {
                     teamCompeting = e.TeamCompeting.ID.ToString();
@@ -479,9 +486,7 @@ namespace TrackerLibrary.DataAccess.TextHelpers
 
         #endregion
 
-        // For some reason i can't get the team names. 
-        // So I'm probably going to skip text parts.
-        // Until one day i decide to look again
+      
         public static void UpdateMatchupToFile( this MatchupModel matchup)
         {
             List<MatchupModel> matchups = GlobalConfig.MatchupFile.FullFilePath().LoadFile().ConvertToMatchupModels();

@@ -95,8 +95,10 @@ namespace TrackerLibrary.DataAccess
 
         public void CreateTournament(TournamentModel model)
         {
-            List<TournamentModel> tournaments = TournamentFile.FullFilePath()
-                .LoadFile().ConvertToTournamentModels(TeamFile,PeopleFile,PrizesFile);
+            List<TournamentModel> tournaments = TournamentFile
+                .FullFilePath()
+                .LoadFile()
+                .ConvertToTournamentModels(TeamFile, PeopleFile, PrizesFile);
 
             int currentID = 1;
             if (tournaments.Count > 0)
