@@ -28,7 +28,6 @@ namespace TrackerUI
             LoadFormData();
 
             LoadRounds();
-
         }
 
         private void LoadFormData()
@@ -63,7 +62,6 @@ namespace TrackerUI
                     currRound = matchups.First().MatchupRound;
                     rounds.Add(currRound);
                 }
-
                 WireUpRoundsLists();
             }
         }
@@ -97,7 +95,6 @@ namespace TrackerUI
                             selectedMatchups.Add(m);
                         }
                     }
-
                 }
             }
             WireUpMatchupsList();
@@ -140,7 +137,6 @@ namespace TrackerUI
                     }
                 }
             }
-
         }
 
         private void matchupListbox_SelectedIndexChanged(object sender, EventArgs e)
@@ -181,7 +177,6 @@ namespace TrackerUI
                             return;
                         }
                     }
-                    
                 }
 
                 if (i == 1)
@@ -203,43 +198,12 @@ namespace TrackerUI
                 }
             }
 
-            if (teamOneScore > teamTwoScore)
-            {
-                m.Winner = m.Entries[0].TeamCompeting;
-            }
-            else if (teamTwoScore > teamOneScore)
-            {
-                m.Winner = m.Entries[1].TeamCompeting;
-            }
-            else
-            {
-                MessageBox.Show("It's a tie and rematch is needed for these teams.");
-            }
-
-
-            foreach (List<MatchupModel> round in tournament.Rounds)
-            {
-                foreach (MatchupModel rm in round)
-                {
-                    foreach (MatchupEntryModel me in rm.Entries)
-                    {
-                        if (me.ParentMatchup?.ID  == m.ID)
-                        {
-                            me.TeamCompeting = m.Winner;
-                            GlobalConfig.Connection.UpdateMatchup(rm);
-                        }
-                    }
-                }
-            }
-
+            TournamentLogic.UpdateTournamentResults(tournament);
             teamOneName.Text = "<Team One>";
             team1ScoreValue.Text = "";
             teamTwoName.Text = "<Team Two>";
             team2ScoreValue.Text = "";
             LoadMatchups();
-
-            GlobalConfig.Connection.UpdateMatchup(m);
-
         }
     }
 }

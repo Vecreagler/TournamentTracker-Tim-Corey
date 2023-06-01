@@ -26,13 +26,10 @@ namespace TrackerUI
             LoadListData();
             WireUpLists();
         }
-
         private void LoadListData()
         {
             availableTeamMembers = GlobalConfig.Connection.GetPerson_All();
         }
-
-
         private void CreateSampleData()
         {
             availableTeamMembers.Add(new PersonModel { FirstName = "Tim", Lastname = "Corey" });
@@ -41,7 +38,6 @@ namespace TrackerUI
             selectedTeamMembers.Add(new PersonModel { FirstName = "Jane", Lastname = "Doe" });
             selectedTeamMembers.Add(new PersonModel { FirstName = "Bill", Lastname = "Smith" });
         }
-
         private void WireUpLists()
         {
             selectTeamMemberDropdown.DataSource = null;
@@ -54,7 +50,6 @@ namespace TrackerUI
             teamMembersListbox.DataSource = selectedTeamMembers;
             teamMembersListbox.DisplayMember = "FullName";
         }
-
         private void createMemberButton_Click(object sender, EventArgs e)
         {
             if (ValidateForm())
@@ -82,7 +77,6 @@ namespace TrackerUI
                 MessageBox.Show("You need to fill all of the boxes", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         private bool ValidateForm()
         {
             if (firstNameValue.Text.Length == 0)
@@ -107,7 +101,6 @@ namespace TrackerUI
 
             return true;
         }
-
         private void addMemberButton_Click(object sender, EventArgs e)
         {
             PersonModel p = (PersonModel)selectTeamMemberDropdown.SelectedItem;
@@ -121,7 +114,6 @@ namespace TrackerUI
             WireUpLists();
             }
         }
-
         private void deleteSelectedMemberButton_Click(object sender, EventArgs e)
         {
             PersonModel p = (PersonModel)teamMembersListbox.SelectedItem;
@@ -134,7 +126,6 @@ namespace TrackerUI
             WireUpLists();
             }
         }
-
         private void createTeamButton_Click(object sender, EventArgs e)
         {
             TeamModel t = new TeamModel();
@@ -148,7 +139,5 @@ namespace TrackerUI
             this.Close();
 
         }
-
-        
     }
 }

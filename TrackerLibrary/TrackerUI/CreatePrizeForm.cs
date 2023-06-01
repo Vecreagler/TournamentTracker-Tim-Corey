@@ -21,7 +21,6 @@ namespace TrackerUI
 
             callingForm = caller;
         }
-
         private void createPrizeButton_Click(object sender, EventArgs e)
         {
             if (ValidateForm())
@@ -45,7 +44,6 @@ namespace TrackerUI
             }
             else { MessageBox.Show("This form is invalid","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);}
         }
-
         private bool ValidateForm()
         {
             bool output = true;
