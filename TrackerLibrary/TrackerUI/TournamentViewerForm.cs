@@ -153,8 +153,40 @@ namespace TrackerUI
             LoadMatchups();
         }
 
+        private bool IsValidData()
+        {
+            bool output = true;
+            double teamOneScore = 0;
+            double teamTwoScore = 0;
+            bool scoreOneValid = double.TryParse(team1ScoreValue.Text, out teamOneScore);
+            bool scoreTwoValid = double.TryParse(team2ScoreValue.Text, out teamTwoScore);
+
+            if (!scoreOneValid || !scoreTwoValid)
+            {
+                output = false;
+            }
+
+            if (teamOneScore == 0 && teamTwoScore == 0)
+            {
+                output = false;
+            }
+            if (teamTwoScore == teamOneScore)
+            {
+                output = false;
+            }
+            return output;
+        }
         private void scoreButton_Click(object sender, EventArgs e)
         {
+            if (!IsValidData())
+            {
+                MessageBox.Show("You need to enter valid data", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // I don't understand why do we check valid data again
+            // we were alredy checking for valid data down here 🤔🤔 
+
             MatchupModel m = (MatchupModel)matchupListbox.SelectedItem;
             double teamOneScore = 0;
             double teamTwoScore = 0;
@@ -198,7 +230,17 @@ namespace TrackerUI
                 }
             }
 
+            try
+            {
             TournamentLogic.UpdateTournamentResults(tournament);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"The app had the following error: {ex.Message}");
+            }
+
+            tournament.AlertUsersToNewRound();
+
             teamOneName.Text = "<Team One>";
             team1ScoreValue.Text = "";
             teamTwoName.Text = "<Team Two>";

@@ -22,9 +22,9 @@ namespace TrackerLibrary
 
         public static IDataConnection Connection { get; private set; } // = new List<IDataConnection>();
 
-        public static void InitializeConnections(DatabaseType db) 
+        public static void InitializeConnections(DatabaseType db)
         {
-            if (db == DatabaseType.Sql) 
+            if (db == DatabaseType.Sql)
             {
                 SqlConnector sql = new SqlConnector();
                 Connection = sql;
@@ -40,6 +40,11 @@ namespace TrackerLibrary
         public static string CnnString(string name)
         {
             return ConfigurationManager.ConnectionStrings[name].ConnectionString;
+        }
+
+        public static string AppKeyLookup(string key)
+        {
+           return ConfigurationManager.AppSettings[key];
         }
     }
 }

@@ -115,14 +115,15 @@ namespace TrackerLibrary
 
         public static void UpdateTournamentResults(TournamentModel model)
         {
+            int startingRound = model.CheckCurrentRound();
             List<MatchupModel> toScore = new List<MatchupModel>();
 
             foreach (List<MatchupModel> round in model.Rounds)
             {
                 foreach (MatchupModel rm in round)
                 {
-                    if (rm.Winner == null &&  (rm.Entries.Any(x=> x.Score != 0) || rm.Entries.Count == 1 ) )
-                    {
+                    if ( rm.Entries.Any(x => x.Score != 0) || rm.Entries.Count == 1)
+                        {
                         toScore.Add(rm);
                     }
                 }
@@ -133,10 +134,97 @@ namespace TrackerLibrary
 
             toScore.ForEach(x => GlobalConfig.Connection.UpdateMatchup(x));
 
+            int endingRound = model.CheckCurrentRound();
+            if (endingRound > startingRound)
+            {
+
+            }
+
+
             //foreach (MatchupModel x in toScore)
             //{
             //    GlobalConfig.Connection.UpdateMatchup(x);
             //}
+        }
+
+        public static void AlertUsersToNewRound(this TournamentModel model)
+        {
+            int currentRoundNumber = model.CheckCurrentRound();
+            List<MatchupModel> currentRound = model.Rounds.Where(x => x.First().MatchupRound == currentRoundNumber).First();
+
+            foreach (MatchupModel matchup in currentRound)
+            {
+                foreach (MatchupEntryModel me in matchup.Entries)
+                {
+                    foreach (PersonModel p in me.TeamCompeting.TeamMembers)
+                    {
+                        AlertPlayerToNewRound(p, me.TeamCompeting.TeamName, matchup.Entries.Where(x => x.TeamCompeting == me.TeamCompeting).FirstOrDefault());
+                    }
+                }
+            }
+        }
+
+        public static void AlertPlayerToNewRound(PersonModel p, string teamName, MatchupEntryModel competitor)
+        {
+            if (p.EmailAddress.Length == 0)
+            {
+                return;
+            }
+
+            string sender = "";
+            string to = "";
+            string recpient = "";
+            string subject = "";
+            StringBuilder body = new StringBuilder();
+
+            if (competitor != null)
+            {
+                subject = $"You have a new matchup with { competitor.TeamCompeting.TeamName  } !";
+
+                body.Append("Hello ");
+                body.Append(p.FirstName);
+                body.AppendLine(", ");
+                body.AppendLine();
+                body.AppendLine("You have a new matchup !");
+                body.Append("Competitor: ");
+                body.Append(competitor.TeamCompeting.TeamName);
+                body.AppendLine();
+                body.AppendLine();
+                body.AppendLine("Have a great tournament !");
+                body.AppendLine("~Tournament Tracker");
+            }
+            else
+            {
+                subject = "You have a bye this round !";
+
+                body.Append("Hello ");
+                body.Append(p.FirstName);
+                body.AppendLine(", ");
+                body.AppendLine();
+                body.AppendLine("Enjoy your bye round. ");
+                body.AppendLine("~Tournament Tracker");
+            }
+            sender = GlobalConfig.AppKeyLookup("senderEmail");
+            to = p.EmailAddress;
+
+
+            EmailLogic.SendEmail(sender, to, subject, body.ToString());
+        }
+
+            private static int CheckCurrentRound(this TournamentModel model) 
+        {
+            int output = 0;
+
+            foreach (List<MatchupModel> round in model.Rounds)
+            {
+                if (round.All( x => x.Winner != null) )
+                {
+                    output += 1;
+                }
+            }
+
+            return output;
+
         }
 
         private static void AdvancedWinners(List<MatchupModel> models , TournamentModel tournament)

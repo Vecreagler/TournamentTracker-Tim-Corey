@@ -220,6 +220,7 @@ namespace TrackerLibrary.DataAccess
                         
                         connection.Execute("dbo.spMatchupEntries_Insert", p, commandType: CommandType.StoredProcedure);
 
+                        entry.ID = p.Get<int>("@ID");
                     }
 
                 }
