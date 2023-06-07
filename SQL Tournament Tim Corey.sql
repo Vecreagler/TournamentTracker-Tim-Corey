@@ -400,6 +400,21 @@ WHERE ID = @ID;
 END
 
 
+
+--stored procedure
+--spTournaments_Complete
+CREATE PROCEDURE dbo.spTournaments_Complete
+@ID INT
+AS
+BEGIN
+SET NOCOUNT ON;
+UPDATE dbo.Tournaments
+SET Active = 0
+WHERE ID = @ID;
+END
+
+
+
 select * from Matchups
 --reset area
 drop table TournamentPrizes

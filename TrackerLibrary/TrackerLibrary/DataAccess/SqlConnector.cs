@@ -279,8 +279,16 @@ namespace TrackerLibrary.DataAccess
                     connection.Execute("dbo.spMatchupEntries_Update", p, commandType: CommandType.StoredProcedure);
 
                 }
+            }
+        }
 
-
+        public void CompleteTournament(TournamentModel model)
+        {
+            using (IDbConnection connection = new Microsoft.Data.SqlClient.SqlConnection(GlobalConfig.CnnString("Tournaments")))
+            {
+                var p = new DynamicParameters();
+                p.Add("@ID", model.ID);
+                connection.Execute("dbo.spTournaments_Complete", p, commandType: CommandType.StoredProcedure);
             }
         }
     }
