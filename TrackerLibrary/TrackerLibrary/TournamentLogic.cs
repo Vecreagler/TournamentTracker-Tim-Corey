@@ -31,6 +31,7 @@ namespace TrackerLibrary
             List<MatchupModel> previousRound = model.Rounds[0];
             List<MatchupModel> currRound = new List<MatchupModel>();
             MatchupModel currMatchup = new MatchupModel();
+            MatchupModel lastMatchup = new MatchupModel();
 
 
             while (round <= rounds)
@@ -45,7 +46,16 @@ namespace TrackerLibrary
                         currRound.Add(currMatchup);
                         currMatchup = new MatchupModel();
                     }
+
+                   
                 }
+                if (previousRound.Count % 2 > 0 && previousRound.Last().Entries.TrueForAll(x => x.TeamCompeting != null))
+                {
+                    lastMatchup.Entries.Add(new MatchupEntryModel { ParentMatchup = previousRound.LastOrDefault() });
+                    currRound.Add(lastMatchup);
+
+                }
+
                 model.Rounds.Add(currRound);
                 previousRound = currRound;
 
@@ -53,6 +63,12 @@ namespace TrackerLibrary
                 round += 1;
 
             }
+
+            //if (byes>0)
+            //{
+            //    MatchupModel matchup = new MatchupModel();
+                
+            //}
         }
 
         private static List<MatchupModel>CreateFirstRound(int byes, List<TeamModel> teams)
@@ -81,29 +97,19 @@ namespace TrackerLibrary
 
         private static int NumberOfByes(int rounds, int numberOfTeams)
         {
-            int output;
-            int totalTeams = 1;
+            rounds += 1;
+            int totalTeams = 2 * rounds;
 
-            for (int i = 0; i < rounds; i++)
-            {
-                totalTeams *= 2;
-            }
-
-            output = totalTeams - numberOfTeams;
-            return output;
+            return totalTeams - numberOfTeams;
 
         }
 
         private static int FindNumberOfRounds(int teamCount)
         {
-            int output = 1;
-            int val = 2;
+            int output;
+            double log = Math.Log(teamCount, 2);
+            output = (int)Math.Ceiling(log);
 
-            while (val < teamCount)
-            {
-                output += 1;
-                val *= 2;
-            }
             return output;
 
         }
@@ -137,7 +143,7 @@ namespace TrackerLibrary
             int endingRound = model.CheckCurrentRound();
             if (endingRound > startingRound)
             {
-
+                model.AlertUsersToNewRound();
             }
 
 

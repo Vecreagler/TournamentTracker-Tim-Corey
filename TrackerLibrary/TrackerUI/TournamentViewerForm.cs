@@ -248,6 +248,7 @@ namespace TrackerUI
 
             tournament.AlertUsersToNewRound();
 
+
             teamOneName.Text = "<Team One>";
             team1ScoreValue.Text = "";
             teamTwoName.Text = "<Team Two>";
